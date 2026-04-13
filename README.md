@@ -1,3 +1,52 @@
+# Pluggable Persistence Layer
+
+This app demonstrates a clean architecture for mobile state and persistence. You can switch between three persistence backends:
+
+- **In-Memory Only**: No data is saved between app restarts (good for demos/tests)
+- **AsyncStorage**: Uses [`@react-native-async-storage/async-storage`](https://github.com/react-native-async-storage/async-storage) for simple key-value persistence
+- **SQLite**: Uses [`react-native-sqlite-storage`](https://github.com/andpor/react-native-sqlite-storage) for structured, scalable local database storage
+
+## How to Switch Persistence Modes
+
+1. Open [`src/persistence/persistenceConfig.js`](src/persistence/persistenceConfig.js)
+2. Change the value of `PERSISTENCE_TYPE` to `'memory'`, `'asyncStorage'`, or `'sqlite'`:
+
+   ```js
+   export const PERSISTENCE_TYPE = 'sqlite';
+   ```
+
+3. Save the file and reload/rebuild your app.
+
+**Note:**
+
+- For `'sqlite'`, you must install and link `react-native-sqlite-storage`:
+  ```sh
+  npm install react-native-sqlite-storage
+  npx pod-install # (for iOS)
+  ```
+- For `'asyncStorage'`, install:
+  ```sh
+  npm install @react-native-async-storage/async-storage
+  ```
+
+## Settings Screen
+
+You can access a Settings screen from the main app bar (cog icon). This screen shows the current persistence mode and instructions for switching. For safety and simplicity, switching persistence at runtime is not supported—make changes in the config file and reload the app.
+
+## Architecture
+
+```
+UI Components
+	↓
+React Context State (source of truth while app is running)
+	↓
+Persistence Layer (AsyncStorage, SQLite, or In-Memory)
+```
+
+All search, filter, and sort operations are performed in memory for a responsive UI. Persistence is used for durability only.
+
+---
+
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
 # Getting Started
