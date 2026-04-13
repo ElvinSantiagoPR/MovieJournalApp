@@ -1,146 +1,122 @@
-# Pluggable Persistence Layer
+# MovieJournalApp
 
-This app demonstrates a clean architecture for mobile state and persistence. You can switch between three persistence backends:
-
-- **In-Memory Only**: No data is saved between app restarts (good for demos/tests)
-- **AsyncStorage**: Uses [`@react-native-async-storage/async-storage`](https://github.com/react-native-async-storage/async-storage) for simple key-value persistence
-- **SQLite**: Uses [`react-native-sqlite-storage`](https://github.com/andpor/react-native-sqlite-storage) for structured, scalable local database storage
-
-## How to Switch Persistence Modes
-
-1. Open [`src/persistence/persistenceConfig.js`](src/persistence/persistenceConfig.js)
-2. Change the value of `PERSISTENCE_TYPE` to `'memory'`, `'asyncStorage'`, or `'sqlite'`:
-
-   ```js
-   export const PERSISTENCE_TYPE = 'sqlite';
-   ```
-
-3. Save the file and reload/rebuild your app.
-
-**Note:**
-
-- For `'sqlite'`, you must install and link `react-native-sqlite-storage`:
-  ```sh
-  npm install react-native-sqlite-storage
-  npx pod-install # (for iOS)
-  ```
-- For `'asyncStorage'`, install:
-  ```sh
-  npm install @react-native-async-storage/async-storage
-  ```
-
-## Settings Screen
-
-You can access a Settings screen from the main app bar (cog icon). This screen shows the current persistence mode and instructions for switching. For safety and simplicity, switching persistence at runtime is not supported—make changes in the config file and reload the app.
-
-## Architecture
-
-```
-UI Components
-	↓
-React Context State (source of truth while app is running)
-	↓
-Persistence Layer (AsyncStorage, SQLite, or In-Memory)
-```
-
-All search, filter, and sort operations are performed in memory for a responsive UI. Persistence is used for durability only.
+MovieJournalApp is a cross-platform mobile app for journaling and tracking movies you have watched, built with React Native, React Navigation, and SQLite for persistent storage. Movie entries are stored locally and can be managed offline.
 
 ---
 
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+## 🚀 Getting Started
 
-# Getting Started
+### Prerequisites
 
-> **Note**: Make sure you have completed the [Set Up Your Environment](https://reactnative.dev/docs/set-up-your-environment) guide before proceeding.
+- **Node.js** (v16 or later recommended)
+- **Yarn** or **npm**
+- **Android Studio** (for Android) or **Xcode** (for iOS)
+- **CocoaPods** (for iOS: run `sudo gem install cocoapods`)
 
-## Step 1: Start Metro
+### Setup & Run Instructions
 
-First, you will need to run **Metro**, the JavaScript build tool for React Native.
+1. **Clone the repository:**
+   ```sh
+   git clone <your-repo-url>
+   cd MovieJournalApp
+   ```
+2. **Install dependencies:**
+   ```sh
+   yarn install
+   # or
+   npm install
+   ```
+3. **iOS setup:**
+   - Navigate to the `ios` folder and install pods:
+     ```sh
+     cd ios && pod install && cd ..
+     ```
+   - Requires a Mac with Xcode installed.
+4. **Run the app:**
+   - **Android:**
+     ```sh
+     yarn android
+     # or
+     npm run android
+     ```
+   - **iOS:**
+     ```sh
+     yarn ios
+     # or
+     npm run ios
+     ```
 
-To start the Metro dev server, run the following command from the root of your React Native project:
+---
 
-```sh
-# Using npm
-npm start
+## ✨ Features
 
-# OR using Yarn
-yarn start
-```
+- **View Entries:** Browse a list of all your movie journal entries with titles, genres, and ratings.
+- **Add/Edit Entries:** Create new entries or update existing ones with title, genre, rating, review, and date watched.
+- **Delete Entries:** Remove entries from your journal.
+- **Entry Details:** View detailed information for each movie entry.
+- **Offline Support:** All data is stored locally using SQLite. You can add, edit, or delete entries offline.
+- **Modern UI:** Built with React Native Paper for a clean and modern look.
 
-## Step 2: Build and run your app
+## 🖥️ Screens
 
-With Metro running, open a new terminal window/pane from the root of your React Native project, and use one of the following commands to build and run your Android or iOS app:
+- **Entry List:** Main screen showing all movie entries. Tap an entry to view details. Use the + button to add a new entry.
+- **Entry View:** Shows full details for a movie entry, with options to edit or delete.
+- **Entry Form:** Used for both adding and editing entries, with validation for required fields.
 
-### Android
+## 🔄 Offline Support
 
-```sh
-# Using npm
-npm run android
+- The app tracks all changes locally using SQLite.
+- No remote sync is implemented by default, but the architecture allows for future integration.
+- All features work offline; your data is always available.
 
-# OR using Yarn
-yarn android
-```
+---
 
-### iOS
+## 🛠️ Tech Stack
 
-For iOS, remember to install CocoaPods dependencies (this only needs to be run on first clone or after updating native deps).
+- **React Native** for cross-platform mobile development
+- **React Navigation** for screen navigation
+- **React Native Paper** for UI components
+- **SQLite** for local database storage (see below)
+- **Redux Toolkit** for state management
 
-The first time you create a new project, run the Ruby bundler to install CocoaPods itself:
+## 📁 Project Structure
 
-```sh
-bundle install
-```
+- `src/components/` — Reusable UI components (EntryCard, EntryForm, etc.)
+- `src/constants/` — Static data (genres, etc.)
+- `src/persistence/` — Storage logic (SQLite, AsyncStorage, etc.)
+- `src/screens/` — App screens for navigation
+- `src/state/` — Redux state management
+- `App.js` — Main entry point
 
-Then, and every time you update your native dependencies, run:
+---
 
-```sh
-bundle exec pod install
-```
+## 🗄️ Database
 
-For more information, please visit [CocoaPods Getting Started guide](https://guides.cocoapods.org/using/getting-started.html).
+- **Database Used:** SQLite (see `src/persistence/sqlite.js`)
+- **Initialization:** No manual steps required; the database is created automatically on first app launch.
+- **Schema:** See `src/persistence/sqlite.js` for table structure and fields.
 
-```sh
-# Using npm
-npm run ios
+---
 
-# OR using Yarn
-yarn ios
-```
+## 📝 Special Considerations
 
-If everything is set up correctly, you should see your new app running in the Android Emulator, iOS Simulator, or your connected device.
+- **iOS:** Requires Xcode and CocoaPods. See setup steps above.
+- **Android:** Requires Android Studio or an Android device/emulator.
+- **Sync/Cloud:** No remote sync is implemented, but you can extend the app to add cloud sync if needed.
 
-This is one way to run your app — you can also build it directly from Android Studio or Xcode.
+---
 
-## Step 3: Modify your app
+## ⚠️ Known Issues & Limitations
 
-Now that you have successfully run the app, let's make changes!
+- No remote/cloud sync: All data is local only.
+- The app is designed for demo/educational use; not all edge cases are handled.
+- No authentication is implemented.
+- Tested on Android emulator. Some device-specific issues may exist.
 
-Open `App.tsx` in your text editor of choice and make some changes. When you save, your app will automatically update and reflect these changes — this is powered by [Fast Refresh](https://reactnative.dev/docs/fast-refresh).
+---
 
-When you want to forcefully reload, for example to reset the state of your app, you can perform a full reload:
+- Modify the SQLite schema in `src/persistence/sqlite.js` if you need to store more fields.
 
-- **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Dev Menu**, accessed via <kbd>Ctrl</kbd> + <kbd>M</kbd> (Windows/Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (macOS).
-- **iOS**: Press <kbd>R</kbd> in iOS Simulator.
+## 📚 License
 
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [docs](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you're having issues getting the above steps to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+This project is for educational purposes only and is not licensed for commercial use.
